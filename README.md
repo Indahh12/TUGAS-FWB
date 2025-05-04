@@ -84,86 +84,78 @@ D0223319
 
 
 
-🎯 Role dan Fitur Wisata Enrekang
+Role dan Fitur-fiturnya
 1. Admin
-Kelola data destinasi wisata
-
-Kelola data user
-
-Kelola kategori wisata
-
-Monitoring statistik kunjungan
+• Kelola data destinasi wisata
+• Kelola data user
+• Kelola kategori wisata
+• Monitoring statistik kunjungan dan aktivitas sistem
 
 2. User
-Melihat daftar wisata
-
-Memberikan ulasan dan rating
-
-Mengajukan perubahan/penambahan data wisata
-
-Melihat riwayat ulasan pribadi
+• Melihat daftar dan detail wisata
+• Memberikan ulasan dan rating
+• Mengajukan perubahan data wisata
+• Melihat status pengajuan perubahan
 
 3. Guest
-Melihat daftar dan detail destinasi wisata
+• Melihat daftar wisata
+• Melihat ulasan dan rating umum
 
-Melihat ulasan dan rating umum
+Tabel-tabel database beserta field dan tipe datanya
+Nama field | Tipe data | Keterangan
+id | BIGINT | Primary key
+name | VARCHAR | Nama lengkap
+email | VARCHAR | Email unik
+password | VARCHAR | Kata sandi (hash)
+role | ENUM | admin, user, guest
+remember_token | VARCHAR | Token login
+timestamps | TIMESTAMP | created_at, updated_at
 
-🗃️ Tabel-Tabel Database
-1. users
-Field	Tipe Data	Keterangan
-id	BIGINT	Primary key
-name	VARCHAR	Nama lengkap
-email	VARCHAR	Unik
-password	VARCHAR	Hash
-role	ENUM	'admin', 'user', 'guest'
-remember_token	VARCHAR	Token login
-timestamps	TIMESTAMP	created_at, updated_at
-
-2. wisata
-Field	Tipe Data	Keterangan
+1. Tabel wisata
+Nama field	Tipe data	Keterangan
 id	BIGINT	Primary key
 nama	VARCHAR	Nama tempat wisata
-deskripsi	TEXT	Deskripsi
+deskripsi	TEXT	Deskripsi wisata
 lokasi	VARCHAR	Lokasi lengkap
 kategori_id	BIGINT	Relasi ke tabel kategori
-foto	STRING	Path gambar
+foto	VARCHAR	Path gambar wisata
 timestamps	TIMESTAMP	created_at, updated_at
 
-3. kategori
-Field	Tipe Data	Keterangan
+2. Tabel kategori
+Nama field	Tipe data	Keterangan
 id	BIGINT	Primary key
-nama_kategori	VARCHAR	Misalnya: Alam, Budaya, dll.
+nama_kategori	VARCHAR	Nama kategori wisata
 timestamps	TIMESTAMP	created_at, updated_at
 
-4. ulasan
-Field	Tipe Data	Keterangan
+3. Tabel ulasan
+Nama field	Tipe data	Keterangan
 id	BIGINT	Primary key
-user_id	BIGINT	Relasi ke users
-wisata_id	BIGINT	Relasi ke wisata
-rating	INTEGER	1 sampai 5
+user_id	BIGINT	Relasi ke tabel user
+wisata_id	BIGINT	Relasi ke tabel wisata
+rating	INTEGER	Nilai rating (1–5)
 komentar	TEXT	Isi ulasan
 timestamps	TIMESTAMP	created_at, updated_at
 
-5. pengajuan_perubahan
-Field	Tipe Data	Keterangan
+4. Tabel pengajuan_perubahan
+Nama field	Tipe data	Keterangan
 id	BIGINT	Primary key
-user_id	BIGINT	Pengaju
-wisata_id	BIGINT	Wisata terkait
-field_diubah	VARCHAR	Nama field yang diubah
-nilai_lama	TEXT	Nilai sebelumnya
-nilai_baru	TEXT	Nilai yang diajukan
+user_id	BIGINT	Relasi ke tabel user
+wisata_id	BIGINT	Relasi ke tabel wisata
+field_diubah	VARCHAR	Field yang diajukan untuk diubah
+nilai_lama	TEXT	Data sebelumnya
+nilai_baru	TEXT	Data baru yang diajukan
 status	ENUM	pending, disetujui, ditolak
-catatan_admin	TEXT	Opsional oleh admin
+catatan_admin	TEXT	Catatan admin (opsional)
 timestamps	TIMESTAMP	created_at, updated_at
 
-🔗 Relasi Antar Tabel
-users ↔ ulasan → One to Many
+Jenis relasi dan tabel yang berelasi
+User - Ulasan: one to many
 
-users ↔ pengajuan_perubahan → One to Many
+User - Pengajuan_perubahan: one to many
 
-kategori ↔ wisata → One to Many
+Kategori - Wisata: one to many
 
-wisata ↔ ulasan → One to Many
+Wisata - Ulasan: one to many
 
-wisata ↔ pengajuan_perubahan → One to Many
+Wisata - Pengajuan_perubahan: one to many
 
