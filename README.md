@@ -71,6 +71,10 @@ WisataEnrekang
 Nur indah sari
 D0223319
 
+Framework Web Based
+2025
+
+
 
 Wisata Enrekang merupakan sebuah sistem informasi berbasis web yang dirancang untuk memberikan informasi seputar destinasi wisata yang ada di Kabupaten Enrekang. Sistem ini bertujuan untuk menjadi media promosi pariwisata daerah sekaligus memberikan kemudahan bagi masyarakat, wisatawan, dan pihak pengelola dalam mengakses serta mengelola data wisata.
 
@@ -78,62 +82,71 @@ Wisata Enrekang merupakan sebuah sistem informasi berbasis web yang dirancang un
 
 
 Role dan Fitur-fiturnya
-1. Admin
-• Kelola data destinasi wisata
-• Kelola data user
-• Kelola kategori wisata
-• Monitoring statistik kunjungan dan aktivitas sistem
+1. Admin	
+- CRUD Data Wisata
+- Verifikasi Pengajuan
+- Kelola Pengguna
+2. User	
+- Pengajuan Perubahan Data Wisata
+- Lihat Daftar Wisata
+- Profil
+- Pemesanan Tiket
+3. 
+Guest	
+- Lihat Daftar Wisata
+- Cari Wisata
+- Lihat Detail Wisata
 
-2. User
-• Melihat daftar dan detail wisata
-• Memberikan ulasan dan rating
-• Mengajukan perubahan data wisata
-• Melihat status pengajuan perubahan
+Tabel-tabel database beserta field dan tipe datanya
+Tabel 1: users
+| Nama Field  | Tipe Data    | Keterangan                  |
+| ----------- | ------------ | --------------------------- |
+| id          | BIGINT       | Primary Key, Auto Increment |
+| name        | VARCHAR(100) | Nama pengguna               |
+| email       | VARCHAR(100) | Email unik                  |
+| password    | VARCHAR(255) | Password terenkripsi        |
+| role        | ENUM         | admin, user, guest          |
+| created\_at | TIMESTAMP    | Tanggal dibuat              |
+| updated\_at | TIMESTAMP    | Tanggal diperbarui          |
 
-3. Guest
-• Melihat daftar wisata
-• Melihat ulasan dan rating umum
+Tabel 2: wisatas
+| Nama Field   | Tipe Data    | Keterangan                  |
+| ------------ | ------------ | --------------------------- |
+| id           | BIGINT       | Primary Key, Auto Increment |
+| nama\_wisata | VARCHAR(150) | Nama tempat wisata          |
+| lokasi       | VARCHAR(255) | Lokasi wisata               |
+| deskripsi    | TEXT         | Deskripsi tempat wisata     |
+| foto         | VARCHAR(255) | Nama file gambar wisata     |
+| status       | ENUM         | disetujui, pending, ditolak |
+| created\_by  | BIGINT       | Foreign Key ke tabel users  |
+| created\_at  | TIMESTAMP    | Tanggal dibuat              |
+| updated\_at  | TIMESTAMP    | Tanggal diperbarui          |
 
-Tabel-Tabel Database Beserta Field dan Tipe Datanya
-Tabel users
 
-| Nama Field      | Tipe Data | Keterangan               |
-| --------------- | --------- | ------------------------ |
-| id              | BIGINT    | Primary key              |
-| name            | VARCHAR   | Nama lengkap             |
-| email           | VARCHAR   | Email unik               |
-| password        | VARCHAR   | Kata sandi (hash)        |
-| role            | ENUM      | admin, user, guest       |
-| remember\_token | VARCHAR   | Token login              |
-| timestamps      | TIMESTAMP | created\_at, updated\_at |
+Tabel 3: pengajuan_perubahan
+| Nama Field  | Tipe Data | Keterangan                        |
+| ----------- | --------- | --------------------------------- |
+| id          | BIGINT    | Primary Key, Auto Increment       |
+| user\_id    | BIGINT    | Foreign Key ke users              |
+| wisata\_id  | BIGINT    | Foreign Key ke wisatas            |
+| perubahan   | TEXT      | Deskripsi perubahan yang diajukan |
+| status      | ENUM      | pending, disetujui, ditolak       |
+| created\_at | TIMESTAMP | Tanggal pengajuan                 |
+| updated\_at | TIMESTAMP | Tanggal diperbarui                |
 
-1. Tabel wisata
-| Nama Field   | Tipe Data | Keterangan                 |
-| ------------ | --------- | -------------------------- |
-| id           | BIGINT    | Primary key                |
-| nama         | VARCHAR   | Nama tempat wisata         |
-| deskripsi    | TEXT      | Deskripsi wisata           |
-| lokasi       | VARCHAR   | Lokasi lengkap             |
-| kategori\_id | BIGINT    | Relasi ke tabel `kategori` |
-| foto         | VARCHAR   | Path gambar wisata         |
-| timestamps   | TIMESTAMP | created\_at, updated\_at   |
 
-2. Tabel kategori
-| Nama Field     | Tipe Data | Keterangan               |
-| -------------- | --------- | ------------------------ |
-| id             | BIGINT    | Primary key              |
-| nama\_kategori | VARCHAR   | Nama kategori wisata     |
-| timestamps     | TIMESTAMP | created\_at, updated\_at |
+Tabel 4: pemesanan_tiket
+| Nama Field         | Tipe Data | Keterangan                    |
+| ------------------ | --------- | ----------------------------- |
+| id                 | BIGINT    | Primary Key, Auto Increment   |
+| user\_id           | BIGINT    | Foreign Key ke users          |
+| wisata\_id         | BIGINT    | Foreign Key ke wisatas        |
+| jumlah\_tiket      | INTEGER   | Jumlah tiket yang dipesan     |
+| tanggal\_kunjungan | DATE      | Tanggal kunjungan wisata      |
+| status             | ENUM      | pending, berhasil, dibatalkan |
+| created\_at        | TIMESTAMP | Tanggal pemesanan             |
+| updated\_at        | TIMESTAMP | Tanggal diperbarui            |
 
-3. Tabel ulasan
-| Nama Field | Tipe Data | Keterangan               |
-| ---------- | --------- | ------------------------ |
-| id         | BIGINT    | Primary key              |
-| user\_id   | BIGINT    | Relasi ke tabel `users`  |
-| wisata\_id | BIGINT    | Relasi ke tabel `wisata` |
-| rating     | INTEGER   | Nilai rating (1–5)       |
-| komentar   | TEXT      | Isi ulasan               |
-| timestamps | TIMESTAMP | created\_at, updated\_at |
 
 
 4. Tabel pengajuan_perubahan
@@ -150,14 +163,18 @@ Tabel users
 | timestamps     | TIMESTAMP | created\_at, updated\_at         |
 
 
-Jenis relasi dan tabel yang berelasi
-User - Ulasan: one to many
+Jenis Relasi dan Tabel yang Berelasi (Pembaruan)
+users → wisatas
+One to Many (User membuat wisata)
 
-User - Pengajuan_perubahan: one to many
+users → pengajuan_perubahan
+One to Many (User mengajukan perubahan)
 
-Kategori - Wisata: one to many
+wisatas → pengajuan_perubahan
+One to Many (Satu wisata memiliki banyak pengajuan)
 
-Wisata - Ulasan: one to many
+users → pemesanan_tiket
+One to Many (User dapat melakukan banyak pemesanan)
 
-Wisata - Pengajuan_perubahan: one to many
-
+wisatas → pemesanan_tiket
+One to Many (Satu wisata bisa dipesan oleh banyak user)
