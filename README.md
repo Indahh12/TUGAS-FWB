@@ -1,4 +1,4 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+<!-- <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
@@ -58,4 +58,112 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT). -->
+
+WisataEnrekang
+(Sistem informasi wisata kabupaten Enrekang)
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+Nur indah sari
+D0223319
+
+
+
+
+
+
+
+🎯 Role dan Fitur Wisata Enrekang
+1. Admin
+Kelola data destinasi wisata
+
+Kelola data user
+
+Kelola kategori wisata
+
+Monitoring statistik kunjungan
+
+2. User
+Melihat daftar wisata
+
+Memberikan ulasan dan rating
+
+Mengajukan perubahan/penambahan data wisata
+
+Melihat riwayat ulasan pribadi
+
+3. Guest
+Melihat daftar dan detail destinasi wisata
+
+Melihat ulasan dan rating umum
+
+🗃️ Tabel-Tabel Database
+1. users
+Field	Tipe Data	Keterangan
+id	BIGINT	Primary key
+name	VARCHAR	Nama lengkap
+email	VARCHAR	Unik
+password	VARCHAR	Hash
+role	ENUM	'admin', 'user', 'guest'
+remember_token	VARCHAR	Token login
+timestamps	TIMESTAMP	created_at, updated_at
+
+2. wisata
+Field	Tipe Data	Keterangan
+id	BIGINT	Primary key
+nama	VARCHAR	Nama tempat wisata
+deskripsi	TEXT	Deskripsi
+lokasi	VARCHAR	Lokasi lengkap
+kategori_id	BIGINT	Relasi ke tabel kategori
+foto	STRING	Path gambar
+timestamps	TIMESTAMP	created_at, updated_at
+
+3. kategori
+Field	Tipe Data	Keterangan
+id	BIGINT	Primary key
+nama_kategori	VARCHAR	Misalnya: Alam, Budaya, dll.
+timestamps	TIMESTAMP	created_at, updated_at
+
+4. ulasan
+Field	Tipe Data	Keterangan
+id	BIGINT	Primary key
+user_id	BIGINT	Relasi ke users
+wisata_id	BIGINT	Relasi ke wisata
+rating	INTEGER	1 sampai 5
+komentar	TEXT	Isi ulasan
+timestamps	TIMESTAMP	created_at, updated_at
+
+5. pengajuan_perubahan
+Field	Tipe Data	Keterangan
+id	BIGINT	Primary key
+user_id	BIGINT	Pengaju
+wisata_id	BIGINT	Wisata terkait
+field_diubah	VARCHAR	Nama field yang diubah
+nilai_lama	TEXT	Nilai sebelumnya
+nilai_baru	TEXT	Nilai yang diajukan
+status	ENUM	pending, disetujui, ditolak
+catatan_admin	TEXT	Opsional oleh admin
+timestamps	TIMESTAMP	created_at, updated_at
+
+🔗 Relasi Antar Tabel
+users ↔ ulasan → One to Many
+
+users ↔ pengajuan_perubahan → One to Many
+
+kategori ↔ wisata → One to Many
+
+wisata ↔ ulasan → One to Many
+
+wisata ↔ pengajuan_perubahan → One to Many
+
