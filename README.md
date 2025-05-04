@@ -67,19 +67,12 @@ WisataEnrekang
 
 
 
- 
-
-
-
-
-
-
 
 Nur indah sari
 D0223319
 
 
-
+Wisata Enrekang merupakan sebuah sistem informasi berbasis web yang dirancang untuk memberikan informasi seputar destinasi wisata yang ada di Kabupaten Enrekang. Sistem ini bertujuan untuk menjadi media promosi pariwisata daerah sekaligus memberikan kemudahan bagi masyarakat, wisatawan, dan pihak pengelola dalam mengakses serta mengelola data wisata.
 
 
 
@@ -101,52 +94,61 @@ Role dan Fitur-fiturnya
 • Melihat daftar wisata
 • Melihat ulasan dan rating umum
 
-Tabel-tabel database beserta field dan tipe datanya
-Nama field | Tipe data | Keterangan
-id | BIGINT | Primary key
-name | VARCHAR | Nama lengkap
-email | VARCHAR | Email unik
-password | VARCHAR | Kata sandi (hash)
-role | ENUM | admin, user, guest
-remember_token | VARCHAR | Token login
-timestamps | TIMESTAMP | created_at, updated_at
+Tabel-Tabel Database Beserta Field dan Tipe Datanya
+Tabel users
+
+| Nama Field      | Tipe Data | Keterangan               |
+| --------------- | --------- | ------------------------ |
+| id              | BIGINT    | Primary key              |
+| name            | VARCHAR   | Nama lengkap             |
+| email           | VARCHAR   | Email unik               |
+| password        | VARCHAR   | Kata sandi (hash)        |
+| role            | ENUM      | admin, user, guest       |
+| remember\_token | VARCHAR   | Token login              |
+| timestamps      | TIMESTAMP | created\_at, updated\_at |
 
 1. Tabel wisata
-Nama field	Tipe data	Keterangan
-id	BIGINT	Primary key
-nama	VARCHAR	Nama tempat wisata
-deskripsi	TEXT	Deskripsi wisata
-lokasi	VARCHAR	Lokasi lengkap
-kategori_id	BIGINT	Relasi ke tabel kategori
-foto	VARCHAR	Path gambar wisata
-timestamps	TIMESTAMP	created_at, updated_at
+| Nama Field   | Tipe Data | Keterangan                 |
+| ------------ | --------- | -------------------------- |
+| id           | BIGINT    | Primary key                |
+| nama         | VARCHAR   | Nama tempat wisata         |
+| deskripsi    | TEXT      | Deskripsi wisata           |
+| lokasi       | VARCHAR   | Lokasi lengkap             |
+| kategori\_id | BIGINT    | Relasi ke tabel `kategori` |
+| foto         | VARCHAR   | Path gambar wisata         |
+| timestamps   | TIMESTAMP | created\_at, updated\_at   |
 
 2. Tabel kategori
-Nama field	Tipe data	Keterangan
-id	BIGINT	Primary key
-nama_kategori	VARCHAR	Nama kategori wisata
-timestamps	TIMESTAMP	created_at, updated_at
+| Nama Field     | Tipe Data | Keterangan               |
+| -------------- | --------- | ------------------------ |
+| id             | BIGINT    | Primary key              |
+| nama\_kategori | VARCHAR   | Nama kategori wisata     |
+| timestamps     | TIMESTAMP | created\_at, updated\_at |
 
 3. Tabel ulasan
-Nama field	Tipe data	Keterangan
-id	BIGINT	Primary key
-user_id	BIGINT	Relasi ke tabel user
-wisata_id	BIGINT	Relasi ke tabel wisata
-rating	INTEGER	Nilai rating (1–5)
-komentar	TEXT	Isi ulasan
-timestamps	TIMESTAMP	created_at, updated_at
+| Nama Field | Tipe Data | Keterangan               |
+| ---------- | --------- | ------------------------ |
+| id         | BIGINT    | Primary key              |
+| user\_id   | BIGINT    | Relasi ke tabel `users`  |
+| wisata\_id | BIGINT    | Relasi ke tabel `wisata` |
+| rating     | INTEGER   | Nilai rating (1–5)       |
+| komentar   | TEXT      | Isi ulasan               |
+| timestamps | TIMESTAMP | created\_at, updated\_at |
+
 
 4. Tabel pengajuan_perubahan
-Nama field	Tipe data	Keterangan
-id	BIGINT	Primary key
-user_id	BIGINT	Relasi ke tabel user
-wisata_id	BIGINT	Relasi ke tabel wisata
-field_diubah	VARCHAR	Field yang diajukan untuk diubah
-nilai_lama	TEXT	Data sebelumnya
-nilai_baru	TEXT	Data baru yang diajukan
-status	ENUM	pending, disetujui, ditolak
-catatan_admin	TEXT	Catatan admin (opsional)
-timestamps	TIMESTAMP	created_at, updated_at
+| Nama Field     | Tipe Data | Keterangan                       |
+| -------------- | --------- | -------------------------------- |
+| id             | BIGINT    | Primary key                      |
+| user\_id       | BIGINT    | Relasi ke tabel `users`          |
+| wisata\_id     | BIGINT    | Relasi ke tabel `wisata`         |
+| field\_diubah  | VARCHAR   | Field yang diajukan untuk diubah |
+| nilai\_lama    | TEXT      | Data sebelumnya                  |
+| nilai\_baru    | TEXT      | Data baru yang diajukan          |
+| status         | ENUM      | pending, disetujui, ditolak      |
+| catatan\_admin | TEXT      | Catatan admin (opsional)         |
+| timestamps     | TIMESTAMP | created\_at, updated\_at         |
+
 
 Jenis relasi dan tabel yang berelasi
 User - Ulasan: one to many
