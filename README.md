@@ -148,21 +148,6 @@ Tabel 4: pemesanan_tiket
 | updated\_at        | TIMESTAMP | Tanggal diperbarui            |
 
 
-
-4. Tabel pengajuan_perubahan
-| Nama Field     | Tipe Data | Keterangan                       |
-| -------------- | --------- | -------------------------------- |
-| id             | BIGINT    | Primary key                      |
-| user\_id       | BIGINT    | Relasi ke tabel `users`          |
-| wisata\_id     | BIGINT    | Relasi ke tabel `wisata`         |
-| field\_diubah  | VARCHAR   | Field yang diajukan untuk diubah |
-| nilai\_lama    | TEXT      | Data sebelumnya                  |
-| nilai\_baru    | TEXT      | Data baru yang diajukan          |
-| status         | ENUM      | pending, disetujui, ditolak      |
-| catatan\_admin | TEXT      | Catatan admin (opsional)         |
-| timestamps     | TIMESTAMP | created\_at, updated\_at         |
-
-
 Jenis Relasi dan Tabel yang Berelasi (Pembaruan)
 users → wisatas
 One to Many (User membuat wisata)
