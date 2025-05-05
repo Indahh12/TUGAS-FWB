@@ -63,7 +63,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 <div align="center">
 
 *WisataEnrekang*   
-*(Platform Penitipan & Perawatan Hewan dengan Layanan Home Service)* 
+*(sistem informasi tempat wisata kabupaten Enrekang)* 
 
 <br>
 
