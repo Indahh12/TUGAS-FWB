@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-         // Tabel users
-         Schema::create('users', function (Blueprint $table) {
+        // Tabel users
+        Schema::create('user', function (Blueprint $table) {
             $table->id();
             $table->string('name', 100);
             $table->string('email', 100)->unique();
             $table->string('password', 255);
-            $table->enum('role', ['admin', 'user', 'guest']);
+            $table->enum('role', ['admin', 'user']);
             $table->timestamps();
         });
 
@@ -33,17 +33,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        // Tabel pengajuan_perubahan
-        Schema::create('pengajuan_perubahan', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('wisata_id')->constrained('wisatas')->onDelete('cascade');
-            $table->text('perubahan');
-            $table->enum('status', ['pending', 'disetujui', 'ditolak'])->default('pending');
-            $table->timestamps();
-        });
-
-        // Tabel pemesanan_tiket
+        // Tabel pemesanan_tiket (Relasi Many to Many via pemesanan_tiket)
         Schema::create('pemesanan_tiket', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -53,6 +43,23 @@ return new class extends Migration
             $table->enum('status', ['pending', 'berhasil', 'dibatalkan'])->default('pending');
             $table->timestamps();
         });
+
+        // Tabel profils (profil untuk setiap user)
+        Schema::create('profils', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('alamat');
+            $table->string('nomor_telepon');
+            $table->timestamps();
+        });
+
+        // Tabel Many to Many: user_wisata_favorite (Relasi favorit wisata)
+        Schema::create('user_wisata_favorite', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('wisata_id')->constrained('wisatas')->onDelete('cascade');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -60,9 +67,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('user_wisata_favorite');
+        Schema::dropIfExists('profils');
         Schema::dropIfExists('pemesanan_tiket');
-        Schema::dropIfExists('pengajuan_perubahan');
         Schema::dropIfExists('wisatas');
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('user');
     }
 };
