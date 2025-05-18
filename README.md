@@ -62,135 +62,133 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 <div align="center">
 
-*WisataEnrekang*   
-*(sistem informasi tempat wisata kabupaten Enrekang)* 
+# WisataEnrekang  
+**Sistem Informasi Tempat Wisata Kabupaten Enrekang**  
 
-<br>
+<img src="unsulbar.png" alt="Logo Kampus" width="100" />
 
-<img src="unsulbar.png" alt="Logo Kampus" width="100">
+**Nur Indah Sari**  
+**D0223319**
 
-<br></br>
-
-*Nur indah sari*    
-*D0223319*   
-
-<br>
-
-*Framework Web Based*   
-*2025* 
+*Framework Web Based – 2025*  
 
 </div>
 
+---
 
+## 🧭 Deskripsi
 
-Wisata Enrekang merupakan sebuah sistem informasi berbasis web yang dirancang untuk memberikan informasi seputar destinasi wisata yang ada di Kabupaten Enrekang. Sistem ini bertujuan untuk menjadi media promosi pariwisata daerah sekaligus memberikan kemudahan bagi masyarakat, wisatawan, dan pihak pengelola dalam mengakses serta mengelola data wisata.
+**WisataEnrekang** adalah sistem informasi berbasis web yang bertujuan untuk mempromosikan dan mempermudah akses informasi destinasi wisata di Kabupaten Enrekang. Sistem ini menyediakan fitur manajemen data wisata, pemesanan tiket, dan pengajuan perubahan data oleh pengelola wisata.
 
+---
 
+## 👥 Role Pengguna
 
+### 🛠️ 1. Admin (Pengelola Sistem)
+Pengguna utama yang memiliki akses penuh ke seluruh sistem.
 
-🛠️ 1. Admin (Pengelola Sistem)
-Pengguna utama yang punya hak penuh untuk mengatur sistem
+**Hak Akses:**
+- Mengelola data wisata (tambah, edit, hapus)
+- Verifikasi wisata baru dari pengelola
+- Mengelola semua akun pengguna
+- Mengelola seluruh data pemesanan tiket
+- Menonaktifkan akun pengguna/pengelola jika perlu
 
-✅ Peran & Akses:
-Mengelola semua data wisata (tambah/edit/hapus)
+---
 
-Verifikasi wisata yang ditambahkan pengelola
+### 🧑‍🌾 2. Pengelola (Pemilik Tempat Wisata)
+Pengguna yang bertanggung jawab atas pengelolaan data tempat wisata milik mereka sendiri.
 
-Melihat dan mengelola seluruh pengguna
+**Hak Akses:**
+- Tambah/edit/hapus tempat wisata mereka
+- Melihat statistik & pemesanan terkait wisata mereka
+- Tidak dapat memverifikasi data atau mengelola wisata milik orang lain
 
-Melihat dan mengelola semua pemesanan tiket
+---
 
-Menghapus wisata yang melanggar
+### 🧍‍♂️ 3. User (Wisatawan)
+Pengguna umum yang dapat menjelajahi wisata dan melakukan pemesanan tiket.
 
-Menonaktifkan akun pengguna atau pengelola jika perlu
+**Hak Akses:**
+- Melihat daftar & detail tempat wisata
+- Memesan tiket wisata
+- Melihat riwayat pemesanan
+- Mengatur profil pribadi (nama, email, password, dll)
+- Tidak dapat menambah/edit wisata
 
-🧑‍🌾 2. Pengelola (Pemilik atau Penanggung Jawab Tempat Wisata)
-Pengguna yang bertugas menginput dan mengelola informasi wisata milik mereka sendiri
+---
 
-✅ Peran & Akses:
-Tambah/Edit/Hapus wisata yang mereka kelola
+## 🧩 Struktur Database
 
-Melihat statistik atau daftar pemesanan untuk wisata mereka
+### Tabel: `users`
+| Field      | Tipe Data    | Keterangan                        |
+|------------|--------------|-----------------------------------|
+| id         | BIGINT       | Primary Key, Auto Increment       |
+| name       | VARCHAR(100) | Nama pengguna                     |
+| email      | VARCHAR(100) | Unik, digunakan untuk login       |
+| password   | VARCHAR(255) | Password terenkripsi              |
+| role       | ENUM         | 'admin', 'pengelola', 'user'      |
+| timestamps | TIMESTAMP    | created_at & updated_at otomatis  |
 
-Tidak bisa mengakses atau mengedit wisata milik pengelola lain
+---
 
-Tidak bisa memverifikasi data, hanya admin yang bisa
+### Tabel: `wisatas`
+| Field        | Tipe Data    | Keterangan                                  |
+|--------------|--------------|---------------------------------------------|
+| id           | BIGINT       | Primary Key                                 |
+| nama_wisata  | VARCHAR(150) | Nama wisata                                 |
+| lokasi       | VARCHAR(255) | Alamat/lokasi wisata                        |
+| deskripsi    | TEXT         | Deskripsi lengkap                           |
+| foto         | VARCHAR(255) | Nama file gambar                            |
+| status       | ENUM         | 'pending', 'disetujui', 'ditolak'           |
+| created_by   | BIGINT       | FK ke `users.id` (pengelola)                |
+| timestamps   | TIMESTAMP    | created_at & updated_at otomatis            |
 
-🧍‍♂️ 3. User (Wisatawan/Pengunjung yang Login)
-Pengguna umum yang ingin menjelajahi dan memesan wisata
+---
 
-✅ Peran & Akses:
-Melihat dan mencari daftar wisata
+### Tabel: `pemesanan_tiket`
+| Field             | Tipe Data | Keterangan                                |
+|-------------------|-----------|-------------------------------------------|
+| id                | BIGINT    | Primary Key                               |
+| user_id           | BIGINT    | FK ke `users.id`                          |
+| wisata_id         | BIGINT    | FK ke `wisatas.id`                        |
+| jumlah_tiket      | INTEGER   | Jumlah tiket yang dipesan                 |
+| tanggal_kunjungan | DATE      | Tanggal kunjungan                         |
+| status            | ENUM      | 'pending', 'berhasil', 'dibatalkan'       |
+| timestamps        | TIMESTAMP | created_at & updated_at otomatis          |
 
-Melihat detail tempat wisata
+---
 
-Melakukan pemesanan tiket
+### Tabel: `pengajuan_perubahan`
+| Field      | Tipe Data | Keterangan                                |
+|------------|-----------|-------------------------------------------|
+| id         | BIGINT    | Primary Key                               |
+| user_id    | BIGINT    | FK ke `users.id`                          |
+| wisata_id  | BIGINT    | FK ke `wisatas.id`                        |
+| perubahan  | TEXT      | Isi usulan perubahan                      |
+| status     | ENUM      | 'pending', 'disetujui', 'ditolak'         |
+| timestamps | TIMESTAMP | created_at & updated_at otomatis          |
 
-Melihat riwayat pemesanan
+---
 
-Mengelola data profil pribadi (nama, email, password, dll)
+### Tabel: `user_wisata_favorite` *(Many to Many)*
+| Field      | Tipe Data | Keterangan                     |
+|------------|-----------|--------------------------------|
+| id         | BIGINT    | Primary Key                    |
+| user_id    | BIGINT    | FK ke `users.id`               |
+| wisata_id  | BIGINT    | FK ke `wisatas.id`             |
+| timestamps | TIMESTAMP | created_at & updated_at        |
 
-Tidak bisa menambahkan atau mengedit wisata
+---
 
+## 🔁 Relasi Antar Tabel
 
+| Relasi                         | Jenis        | Keterangan                                        |
+|-------------------------------|--------------|---------------------------------------------------|
+| `users` → `wisatas`           | One to Many  | Pengelola bisa punya banyak wisata               |
+| `users` → `pemesanan_tiket`   | One to Many  | User bisa memesan banyak tiket                   |
+| `users` → `pengajuan_perubahan` | One to Many| Pengelola bisa mengajukan beberapa perubahan     |
+| `wisatas` → `pemesanan_tiket` | One to Many  | Satu wisata bisa dipesan oleh banyak user        |
+| `users` ↔ `wisatas` (favorit) | Many to Many | Lewat `user_wisata_favorite` sebagai pivot table |
 
-Tabel-tabel database beserta field dan tipe datanya
-Tabel 1: User
-| Nama Field  | Tipe Data    | Keterangan                  |
-| ----------- | ------------ | --------------------------- |
-| id          | BIGINT       | Primary Key, Auto Increment |
-| name        | VARCHAR(100) | Nama pengguna               |
-| email       | VARCHAR(100) | Unik, digunakan untuk login |
-| password    | VARCHAR(255) | Password terenkripsi        |
-| role        | ENUM         | admin, pengelola, user      |
-| created\_at | TIMESTAMP    | Waktu dibuat                |
-| updated\_at | TIMESTAMP    | Waktu diperbarui            |
-
-
-Tabel 2: profile
-| Nama Field     | Tipe Data    | Keterangan                                     |
-| -------------- | ------------ | ---------------------------------------------- |
-| id             | BIGINT       | Primary Key, Auto Increment                    |
-| user\_id       | BIGINT       | Foreign Key ke `users.id`, UNIQUE (One to One) |
-| alamat         | VARCHAR(255) | Alamat lengkap pengguna                        |
-| no\_hp         | VARCHAR(20)  | Nomor HP pengguna                              |
-| tanggal\_lahir | DATE         | Tanggal lahir pengguna                         |
-
-
-
-Tabel 3: wisatas
-| Nama Field   | Tipe Data    | Keterangan                                 |
-| ------------ | ------------ | ------------------------------------------ |
-| id           | BIGINT       | Primary Key, Auto Increment                |
-| nama\_wisata | VARCHAR(150) | Nama tempat wisata                         |
-| lokasi       | VARCHAR(255) | Alamat/lokasi wisata                       |
-| deskripsi    | TEXT         | Deskripsi lengkap wisata                   |
-| foto         | VARCHAR(255) | Nama file gambar wisata                    |
-| status       | ENUM         | disetujui, ditolak (verifikasi oleh admin) |
-| created\_by  | BIGINT       | Foreign Key ke `users.id` (pengelola)      |
-| created\_at  | TIMESTAMP    | Tanggal dibuat                             |
-| updated\_at  | TIMESTAMP    | Tanggal diperbarui                         |
-
-
-
-Tabel 4: pemesanan_tiket
-| Nama Field         | Tipe Data | Keterangan                    |
-| ------------------ | --------- | ----------------------------- |
-| id                 | BIGINT    | Primary Key, Auto Increment   |
-| user\_id           | BIGINT    | Foreign Key ke users          |
-| wisata\_id         | BIGINT    | Foreign Key ke wisatas        |
-| jumlah\_tiket      | INTEGER   | Jumlah tiket yang dipesan     |
-| tanggal\_kunjungan | DATE      | Tanggal kunjungan wisata      |
-| status             | ENUM      | pending, berhasil, dibatalkan |
-| created\_at        | TIMESTAMP | Tanggal pemesanan             |
-| updated\_at        | TIMESTAMP | Tanggal diperbarui            |
-
-
-| Relasi                         | Jenis        | Penjelasan Singkat                                |
-| ------------------------------ | ------------ | ------------------------------------------------- |
-| `users` → `wisatas`            | One to Many  | 1 pengelola bisa menambahkan banyak wisata        |
-| `users` → `profils`            | One to One   | 1 user hanya punya 1 data profil                  |
-| `users` → `pemesanan_tiket`    | One to Many  | 1 user bisa pesan banyak tiket                    |
-| `wisatas` → `pemesanan_tiket`  | One to Many  | 1 wisata bisa dipesan oleh banyak user            |
-| `users` ↔ `wisatas` (indirect) | Many to Many | user memesan banyak wisata lewat pemesanan\_tiket |
-
+---
