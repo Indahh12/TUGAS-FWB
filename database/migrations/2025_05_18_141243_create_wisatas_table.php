@@ -14,9 +14,11 @@ return new class extends Migration
         Schema::create('wisatas', function (Blueprint $table) {
             $table->id();
             $table->string('nama_wisata');
+            $table->string('lokasi');
             $table->text('deskripsi');
-            $table->string('alamat');
             $table->string('foto')->nullable();
+            $table->enum('status', ['aktif', 'nonaktif'])->default('aktif');  
+    $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); 
             $table->timestamps();
         });
     }
